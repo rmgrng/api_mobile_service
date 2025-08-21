@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>अपिहिमाल गा.पा. - Sheet Viewer</title>
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
+</head>
+<body>
+
+  <h2>अपिहिमाल गा.पा. - Data Table</h2>
+  <table id="sheetData" class="display">
+    <thead>
+      <tr id="table-head">
+        <!-- Headers will load dynamically -->
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Data loads here -->
+    </tbody>
+  </table>
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+  <script>
+    const url = 'https://opensheet.vercel.app/1p3i3kbMt4LkS-WI4epRn86Cq2r8Ox4Qj94HjlJ04IEo/अपिहिमाल%20गा.पा.';
+
+    fetch(url)
+      .then(response => response.json())
+      .then(data => {
+        if (data.length === 0) return;
+
+        // Generate table headers
+        const headers = Object.keys(data[0]);
+        headers.forEach(header => {
+          $('#table-head').append(`<th>${header}</th>`);
+        });
+
+        // Generate table rows
+        data.forEach(row => {
+          let rowHtml = '<tr>';
+          headers.forEach(header => {
+            rowHtml += `<td>${row[header]}</td>`;
+          });
+          rowHtml += '</tr>';
+          $('#sheetData tbody').append(rowHtml);
+        });
+
+        // Initialize DataTable
+        $('#sheetData').DataTable();
+      })
+      .catch(error => console.error('Error loading data:', error));
+  </script>
+
+</body>
+</html>
