@@ -1,26 +1,91 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ne">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>अपिहिमाल गा.पा. - घुम्ती सेवा</title>
+
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari&display=swap" rel="stylesheet">
+
+  <!-- DataTables CSS -->
   <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
+
+  <style>
+    body {
+      font-family: 'Noto Sans Devanagari', sans-serif;
+      margin: 0;
+      padding: 20px;
+      background-color: #f8f9fa;
+      color: #212529;
+    }
+
+    h2 {
+  text-align: center;
+  margin-bottom: 30px;
+  font-size: 1.4rem;
+  line-height: 1.5;
+}
+
+h2 div {
+  margin: 5px 0;
+}
+
+
+    .table-container {
+      overflow-x: auto;
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    table.dataTable {
+      width: 100% !important;
+      border-collapse: collapse;
+    }
+
+    table.dataTable thead th {
+      background-color: #0d6efd;
+      color: white;
+    }
+
+    table.dataTable tbody tr:hover {
+      background-color: #f1f1f1;
+    }
+
+    @media (max-width: 600px) {
+      h2 {
+        font-size: 1.1rem;
+        padding: 0 10px;
+      }
+    }
+  </style>
 </head>
 <body>
 
-  <h2>अपिहिमाल गा.पा. अन्तर्गतका अपाङ्ग/अशक्त/बृद्ध व्यक्तिहरुलाई नागरिकता प्रतिलिपी विवरण तथा राष्ट्रिय परिचयपत्र दर्ता अभियान</h2>
-  <table id="sheetData" class="display">
-    <thead>
-      <tr id="table-head">
-        <!-- Headers will load dynamically -->
-      </tr>
-    </thead>
-    <tbody>
-      <!-- Data loads here -->
-    </tbody>
-  </table>
+  <h2>
+  <div>अपिहिमाल गा.पा. अन्तर्गतका अपाङ्ग/अशक्त/बृद्ध व्यक्तिहरुको लागि</div>
+  <div>नागरिकता प्रतिलिपी विवरण तथा राष्ट्रिय परिचयपत्र दर्ता अभियान</div>
+</h2>
 
+  <div class="table-container">
+    <table id="sheetData" class="display nowrap">
+      <thead>
+        <tr id="table-head">
+          <!-- Headers will load dynamically -->
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Data loads here -->
+      </tbody>
+    </table>
+  </div>
+
+  <!-- jQuery + DataTables -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+
   <script>
     const url = 'https://opensheet.vercel.app/1p3i3kbMt4LkS-WI4epRn86Cq2r8Ox4Qj94HjlJ04IEo/अपिहिमाल%20गा.पा.';
 
@@ -29,24 +94,34 @@
       .then(data => {
         if (data.length === 0) return;
 
-        // Generate table headers
         const headers = Object.keys(data[0]);
         headers.forEach(header => {
           $('#table-head').append(`<th>${header}</th>`);
         });
 
-        // Generate table rows
         data.forEach(row => {
           let rowHtml = '<tr>';
           headers.forEach(header => {
-            rowHtml += `<td>${row[header]}</td>`;
+            rowHtml += `<td>${row[header] || ''}</td>`;
           });
           rowHtml += '</tr>';
           $('#sheetData tbody').append(rowHtml);
         });
 
-        // Initialize DataTable
-        $('#sheetData').DataTable();
+        $('#sheetData').DataTable({
+          responsive: true,
+          pageLength: 10,
+          lengthMenu: [5, 10, 25, 50],
+          language: {
+            search: "🔍 खोज्नुहोस्:",
+            lengthMenu: "_MENU_ पंक्ति देखाउनुहोस्",
+            info: "जम्मा _TOTAL_ मध्ये _START_ देखि _END_",
+            paginate: {
+              next: "अर्को",
+              previous: "अघिल्लो"
+            }
+          }
+        });
       })
       .catch(error => console.error('Error loading data:', error));
   </script>
