@@ -1,15 +1,20 @@
 <!DOCTYPE html>
 <html lang="ne">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>अपिहिमाल गा.पा. - घुम्ती सेवा</title>
 
-  <!-- Google Font -->
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari&display=swap" rel="stylesheet">
-
-  <!-- DataTables CSS -->
-  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
+  <!-- Fonts & Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari&display=swap" rel="stylesheet" />
+  <link
+    rel="stylesheet"
+    href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css"
+  />
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+  />
 
   <style>
     body {
@@ -21,110 +26,448 @@
     }
 
     h2 {
-  text-align: center;
-  margin-bottom: 30px;
-  font-size: 1.4rem;
-  line-height: 1.5;
-}
-
-h2 div {
-  margin: 5px 0;
-}
-
-
-    .table-container {
-      overflow-x: auto;
-      background: white;
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      margin-bottom: 30px;
+      line-height: 1.5;
     }
 
-    table.dataTable {
-      width: 100% !important;
-      border-collapse: collapse;
+    h2 div:first-child {
+      font-size: 1.3rem;
+      font-weight: 500;
+    }
+
+    h2 div:last-child {
+      font-size: 1.6rem;
+      font-weight: bold;
+      margin-top: 10px;
+    }
+
+    /* Remove box layout around table */
+    .table-container {
+      overflow-x: auto;
+      margin-top: 15px;
     }
 
     table.dataTable thead th {
-      background-color: #0d6efd;
-      color: white;
+      background-color: #002147;
+      color: #ffffff;
+      text-align: center;
     }
 
-    table.dataTable tbody tr:hover {
+    table.dataTable tbody td {
+      font-size: 0.95rem;
+      padding: 8px;
+    }
+
+    table.dataTable tbody tr:nth-child(even) {
       background-color: #f1f1f1;
     }
 
-    @media (max-width: 600px) {
-      h2 {
-        font-size: 1.1rem;
-        padding: 0 10px;
+    table.dataTable tbody tr:hover {
+      background-color: #e2e6ea;
+    }
+
+    /* Stylize length menu */
+    div.dataTables_length label {
+      font-size: 0.95rem;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    div.dataTables_length label::before {
+      content: '';
+      font-family: "Font Awesome 6 Free";
+      font-weight: 900;
+    }
+
+    div.dataTables_length select {
+      border-radius: 4px;
+      padding: 5px;
+    }
+
+    /* Stylize search filter */
+    div.dataTables_filter {
+      margin-bottom: 10px; /* space below search box */
+      text-align: right;
+    }
+
+    div.dataTables_filter label {
+      font-size: 0.95rem;
+      font-weight: 500;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    div.dataTables_filter label::before {
+      content: '\f002';
+      font-family: "Font Awesome 6 Free";
+      font-weight: 900;
+    }
+
+    div.dataTables_filter input {
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      padding: 6px 10px;
+      margin-left: 6px;
+      font-size: 1rem;
+      width: 200px;
+      max-width: 100%;
+      transition: border-color 0.3s;
+    }
+
+    div.dataTables_filter input:focus {
+      border-color: #002147;
+      outline: none;
+      box-shadow: 0 0 6px #002147aa;
+    }
+
+    /* Contact Cards container */
+    .contact-section {
+      margin-top: 40px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+    }
+
+    .contact-card {
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgb(0 0 0 / 0.1);
+      padding: 20px;
+      text-align: center;
+      color: #002147;
+      font-weight: 500;
+      font-size: 1rem;
+    }
+
+    .contact-card h4 {
+      margin-top: 0;
+      margin-bottom: 8px;
+      font-size: 1.2rem;
+      font-weight: 700;
+    }
+
+    .contact-card p {
+      margin: 4px 0;
+      font-weight: 400;
+    }
+
+    /* Footer */
+    .footer {
+      text-align: center;
+      margin-top: 50px;
+      font-size: 0.95rem;
+      color: #444;
+      padding-top: 20px;
+      border-top: 1px solid #ccc;
+    }
+
+    /* Login Overlay */
+    #auth-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: #eaf1f8;
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .login-container {
+      display: flex;
+      width: 90%;
+      max-width: 960px;
+      background-color: #fff;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .login-left {
+      flex: 1;
+      background: #f8fbff;
+      padding: 40px 20px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .login-left img {
+      width: 100px;
+      margin: 0 auto 20px;
+    }
+
+    .login-left h2 {
+      font-size: 1.3rem;
+      color: #002147;
+      margin-bottom: 10px;
+    }
+
+    .login-left p {
+      font-size: 1rem;
+      color: #444;
+      line-height: 1.6;
+      margin-bottom: 20px;
+    }
+
+    .login-left footer {
+      margin-top: 20px;
+      font-size: 0.85rem;
+      color: #666;
+    }
+
+    .login-right {
+      flex: 1;
+      background: #002147;
+      color: #fff;
+      padding: 40px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .login-box {
+      width: 100%;
+      max-width: 300px;
+      text-align: center;
+    }
+
+    .lock-icon {
+      margin-bottom: 10px;
+      color: #0d6efd;
+    }
+
+    .login-box h3 {
+      font-size: 1.2rem;
+      margin-bottom: 20px;
+    }
+
+    .input-group {
+      position: relative;
+      margin-bottom: 20px;
+    }
+
+    .input-group i {
+      position: absolute;
+      top: 10px;
+      left: 12px;
+      color: #555;
+    }
+
+    .input-group input {
+      width: 100%;
+      padding: 10px 12px 10px 36px;
+      border: none;
+      border-radius: 5px;
+      font-size: 1rem;
+    }
+
+    .login-box button {
+      background: #0d6efd;
+      color: white;
+      padding: 10px;
+      width: 100%;
+      border: none;
+      border-radius: 5px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .login-box button:hover {
+      background: #0a58ca;
+    }
+
+    @media screen and (max-width: 768px) {
+      .login-container {
+        flex-direction: column;
       }
     }
   </style>
 </head>
 <body>
+  <!-- Login Overlay -->
+  <div id="auth-overlay">
+    <div class="login-container">
+      <div class="login-left">
+        <img src="govlogo.png" alt="Nepal Emblem" />
+        <h2>तथ्याङ्क प्रमाणिकरण प्रणालीमा स्वागत छ ।</h2>
+        <p>
+          यो प्रणाली पालिकाबाट प्राप्त भएका नागरिकताको अभिलेख प्रमाणिकरण,<br />
+          राष्ट्रिय परिचयपत्रको अवस्था जाँच तथा घुम्ती सेवालाई सहज बनाउन तयार गरिएको हो ।
+        </p>
+        <footer>© जिल्ला प्रशासन कार्यालय, दार्चुला</footer>
+      </div>
 
+      <div class="login-right">
+        <div class="login-box">
+          <i class="fa-solid fa-lock fa-2x lock-icon"></i>
+          <h3>कृपया पासवर्ड प्रविष्ट गर्नुहोस्</h3>
+          <div class="input-group">
+            <i class="fa-solid fa-key"></i>
+            <input
+              type="password"
+              id="password-input"
+              placeholder="पासवर्ड प्रविष्ट गर्नुहोस्"
+              autocomplete="off"
+            />
+          </div>
+          <button onclick="checkPassword()">
+            <i class="fa-solid fa-arrow-right-to-bracket"></i> पुष्टि गर्नुहोस्
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Heading -->
   <h2>
-  <div>अपिहिमाल गा.पा. अन्तर्गतका अपाङ्ग/अशक्त/बृद्ध व्यक्तिहरुको लागि</div>
-  <div>नागरिकता प्रतिलिपी विवरण तथा राष्ट्रिय परिचयपत्र दर्ता अभियान</div>
-</h2>
+    <div>अपिहिमाल गा.पा. अन्तर्गतका अपाङ्ग/अशक्त/बृद्ध व्यक्तिहरुको लागि</div>
+    <div>नागरिकता प्रतिलिपी विवरण तथा राष्ट्रिय परिचयपत्र दर्ता अभियान</div>
+  </h2>
 
+  <!-- DataTable -->
   <div class="table-container">
     <table id="sheetData" class="display nowrap">
       <thead>
-        <tr id="table-head">
-          <!-- Headers will load dynamically -->
-        </tr>
+        <tr id="table-head"></tr>
       </thead>
-      <tbody>
-        <!-- Data loads here -->
-      </tbody>
+      <tbody></tbody>
     </table>
   </div>
 
-  <!-- jQuery + DataTables -->
+  <!-- Contact Cards -->
+  <div class="contact-section">
+    <div class="contact-card">
+      <h4>मोहन सिंह धामी</h4>
+      <p>सहायक प्रमुख जिल्ला अधिकारी</p>
+      <p><i class="fa-solid fa-tty"></i> ०९३-४२०२१४</p>
+      <p><i class="fa-solid fa-phone"></i> ९८४८९७३७७७७</p>
+    </div>
+    <div class="contact-card">
+      <h4>राम बहादुर गुरुङ्ग</h4>
+      <p>कम्प्युटर अपरेटर</p>
+      <p>नागरिकता शाखा</p>
+      <p><i class="fa-solid fa-phone"></i> ९८६८६८४३३३</p>
+    </div>
+    <div class="contact-card">
+      <h4>चक्र पन्त</h4>
+      <p>विवरण दर्ता अपरेटर</p>
+      <p>राष्ट्रिय परिचयपत्र शाखा</p>
+      <p><i class="fa-solid fa-phone"></i> ९८६८७९७१७७</p>
+    </div>
+    <div class="contact-card">
+      <h4>अशोक भट्ट</h4>
+      <p>विवरण दर्ता अपरेटर</p>
+      <p>राष्ट्रिय परिचयपत्र शाखा</p>
+      <p><i class="fa-solid fa-phone"></i> ९८४७५७७१९४</p>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="footer">
+    जिल्ला प्रशासन कार्यालय, दार्चुला र अपिहिमाल गाउँपालिकाको समन्वयमा सञ्चालित
+  </div>
+
+  <!-- Scripts -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
 
   <script>
-    const url = 'https://opensheet.vercel.app/1p3i3kbMt4LkS-WI4epRn86Cq2r8Ox4Qj94HjlJ04IEo/अपिहिमाल%20गा.पा.';
+    // Convert Devanagari numbers to English
+    function devanagariToEnglish(str) {
+      const map = {
+        '०': '0',
+        '१': '1',
+        '२': '2',
+        '३': '3',
+        '४': '4',
+        '५': '5',
+        '६': '6',
+        '७': '7',
+        '८': '8',
+        '९': '9',
+      };
+      return str.replace(/[०-९]/g, (d) => map[d]);
+    }
+
+    // Custom sort plugin for Devanagari numerals
+    jQuery.extend(jQuery.fn.dataTable.ext.type.order, {
+      'devnag-num-pre': function (data) {
+        const num = devanagariToEnglish(data);
+        return parseInt(num, 10) || 0;
+      },
+    });
+
+    // Load data and init DataTable
+    const url =
+      'https://opensheet.vercel.app/1p3i3kbMt4LkS-WI4epRn86Cq2r8Ox4Qj94HjlJ04IEo/अपिहिमाल%20गा.पा.';
 
     fetch(url)
-      .then(response => response.json())
-      .then(data => {
+      .then((response) => response.json())
+      .then((data) => {
         if (data.length === 0) return;
 
         const headers = Object.keys(data[0]);
-        headers.forEach(header => {
-          $('#table-head').append(`<th>${header}</th>`);
+        const $thead = $('#table-head');
+
+        headers.forEach((header) => {
+          $thead.append(`<th>${header}</th>`);
         });
 
-        data.forEach(row => {
+        const $tbody = $('#sheetData tbody');
+        data.forEach((row) => {
           let rowHtml = '<tr>';
-          headers.forEach(header => {
+          headers.forEach((header) => {
             rowHtml += `<td>${row[header] || ''}</td>`;
           });
           rowHtml += '</tr>';
-          $('#sheetData tbody').append(rowHtml);
+          $tbody.append(rowHtml);
         });
+
+        // Get index of 'क्र.सं.' column
+        const snIndex = headers.findIndex((h) => h.trim() === 'क्र.सं.');
 
         $('#sheetData').DataTable({
           responsive: true,
           pageLength: 10,
           lengthMenu: [5, 10, 25, 50],
+          order: [[snIndex >= 0 ? snIndex : 0, 'asc']],
+          columnDefs: [
+            {
+              targets: snIndex >= 0 ? snIndex : 0,
+              type: 'devnag-num',
+            },
+          ],
           language: {
-            search: "🔍 खोज्नुहोस्:",
+            search: "खोज्नुहोस्:",
             lengthMenu: "_MENU_ पंक्ति देखाउनुहोस्",
             info: "जम्मा _TOTAL_ मध्ये _START_ देखि _END_",
             paginate: {
               next: "अर्को",
-              previous: "अघिल्लो"
-            }
-          }
+              previous: "अघिल्लो",
+            },
+          },
         });
       })
-      .catch(error => console.error('Error loading data:', error));
-  </script>
+      .catch((error) => console.error('Error loading data:', error));
 
+    // Password check (example, replace with real check)
+    function checkPassword() {
+      const pwd = document.getElementById('password-input').value.trim();
+      if (pwd === 'admin123') {
+        document.getElementById('auth-overlay').style.display = 'none';
+      } else {
+        alert('पासवर्ड गलत छ। कृपया पुन: प्रयास गर्नुहोस्।');
+      }
+    }
+  </script>
 </body>
 </html>
