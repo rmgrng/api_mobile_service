@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="ne">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -7,14 +8,8 @@
 
   <!-- Fonts & Icons -->
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari&display=swap" rel="stylesheet" />
-  <link
-    rel="stylesheet"
-    href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css"
-  />
-  <link
-    rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
-  />
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 
   <style>
     body {
@@ -89,7 +84,8 @@
 
     /* Stylize search filter */
     div.dataTables_filter {
-      margin-bottom: 10px; /* space below search box */
+      margin-bottom: 10px;
+      /* space below search box */
       text-align: right;
     }
 
@@ -285,6 +281,31 @@
       background: #0a58ca;
     }
 
+    /* Floating WhatsApp Button */
+    .whatsapp-float {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background-color: #25D366;
+      color: white;
+      border-radius: 50%;
+      width: 56px;
+      height: 56px;
+      text-align: center;
+      font-size: 28px;
+      z-index: 10000;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      transition: background-color 0.3s;
+    }
+
+    .whatsapp-float:hover {
+      background-color: #1ebd5a;
+    }
+
     @media screen and (max-width: 768px) {
       .login-container {
         flex-direction: column;
@@ -292,6 +313,7 @@
     }
   </style>
 </head>
+
 <body>
   <!-- Login Overlay -->
   <div id="auth-overlay">
@@ -312,12 +334,7 @@
           <h3>कृपया पासवर्ड प्रविष्ट गर्नुहोस्</h3>
           <div class="input-group">
             <i class="fa-solid fa-key"></i>
-            <input
-              type="password"
-              id="password-input"
-              placeholder="पासवर्ड प्रविष्ट गर्नुहोस्"
-              autocomplete="off"
-            />
+            <input type="password" id="password-input" placeholder="पासवर्ड प्रविष्ट गर्नुहोस्" autocomplete="off" />
           </div>
           <button onclick="checkPassword()">
             <i class="fa-solid fa-arrow-right-to-bracket"></i> पुष्टि गर्नुहोस्
@@ -375,6 +392,13 @@
   <div class="footer">
     जिल्ला प्रशासन कार्यालय, दार्चुला र अपिहिमाल गाउँपालिकाको समन्वयमा सञ्चालित
   </div>
+
+  <!-- Floating WhatsApp Button (Hidden by Default) -->
+  <a id="whatsapp-button" href="https://wa.me/9779868684333" target="_blank" style="display: none;"
+    class="whatsapp-float" title="WhatsApp Group मा सहभागी हुनुहोस्">
+    <i class="fa-brands fa-whatsapp"></i>
+  </a>
+
 
   <!-- Scripts -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -459,15 +483,37 @@
       })
       .catch((error) => console.error('Error loading data:', error));
 
-    // Password check (example, replace with real check)
-    function checkPassword() {
-      const pwd = document.getElementById('password-input').value.trim();
-      if (pwd === '@pi#2082') {
+    // Function to hash a password using SHA-256
+    async function hashPassword(password) {
+      const encoder = new TextEncoder();
+      const data = encoder.encode(password);
+      const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+      const hashArray = Array.from(new Uint8Array(hashBuffer));
+      return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+    }
+
+    // Check the password by comparing hashes
+    async function checkPassword() {
+      const input = document.getElementById('password-input').value.trim();
+      const hashedInput = await hashPassword(input);
+      const correctHash = '03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4'; // Replace this
+
+      if (hashedInput === correctHash) {
+        sessionStorage.setItem('loggedIn', 'true');
         document.getElementById('auth-overlay').style.display = 'none';
+        document.getElementById('whatsapp-button').style.display = 'flex';
       } else {
         alert('पासवर्ड गलत छ। कृपया पुन: प्रयास गर्नुहोस्।');
       }
     }
+    // On page load, check if already logged in
+    window.onload = function () {
+      if (sessionStorage.getItem('loggedIn') === 'true') {
+        document.getElementById('auth-overlay').style.display = 'none';
+        document.getElementById('whatsapp-button').style.display = 'flex';
+      }
+    };
   </script>
 </body>
+
 </html>
